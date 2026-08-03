@@ -1,0 +1,65 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (keep .env.example tracked)
+.env
+.env.*
+!.env.example
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# nested local repos, private guides & agent rules
+/TIL-Cybersecurity
+AGENTS.md
+CLAUDE.md
+src/components/study/strategy-guide.tsx
+src/app/study-abroad/guide/
+
+# local one-off maintenance & private seed scripts
+bump-tasks.ts
+fix-*.ts
+fix-*.js
+list-*.ts
+master-cleanup.ts
+remove-repetitive.ts
+reseed-*.ts
+reset-*.ts
+revert-tasks.ts
+rollback-webdev.ts
+seed-*.ts
+shift-*.ts
+update-python-url.ts
