@@ -4,13 +4,19 @@ import { prisma } from "@/lib/prisma";
 import { ensureUserExists } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 
+// Always align daily boundaries to Pakistan Standard Time (UTC+5) on both local and Vercel UTC servers
+function getStartOfTodayPKT(): Date {
+  const now = new Date();
+  const pktOffsetMs = 5 * 60 * 60 * 1000;
+  const pktNow = new Date(now.getTime() + pktOffsetMs);
+  pktNow.setUTCHours(0, 0, 0, 0);
+  return new Date(pktNow.getTime() - pktOffsetMs);
+}
+
 export async function getHabits() {
   const user = await ensureUserExists();
-  
-  // Get start and end of today in local time ideally, but UTC for now
-  const startOfToday = new Date();
-  startOfToday.setHours(0, 0, 0, 0);
-  
+  const startOfToday = getStartOfTodayPKT();
+
   const habits = await prisma.habit.findMany({
     where: { userId: user.id },
     include: {
@@ -18,16 +24,16 @@ export async function getHabits() {
         where: {
           completedAt: {
             gte: startOfToday,
-          }
-        }
-      }
+          },
+        },
+      },
     },
-    orderBy: { createdAt: "asc" }
+    orderBy: { createdAt: "asc" },
   });
 
-  return habits.map(habit => ({
+  return habits.map((habit) => ({
     ...habit,
-    completedToday: habit.completions.length > 0
+    completedToday: habit.completions.length > 0,
   }));
 }
 
@@ -45,7 +51,7 @@ export async function createHabit(formData: FormData) {
       category,
       priority: priority || "Medium",
       userId: user.id,
-    }
+    },
   });
 
   revalidatePath("/habits");
@@ -54,17 +60,15 @@ export async function createHabit(formData: FormData) {
 
 export async function toggleHabit(habitId: string) {
   const user = await ensureUserExists();
-  
-  const startOfToday = new Date();
-  startOfToday.setHours(0, 0, 0, 0);
+  const startOfToday = getStartOfTodayPKT();
 
   const habit = await prisma.habit.findUnique({
     where: { id: habitId, userId: user.id },
     include: {
       completions: {
-        where: { completedAt: { gte: startOfToday } }
-      }
-    }
+        where: { completedAt: { gte: startOfToday } },
+      },
+    },
   });
 
   if (!habit) throw new Error("Habit not found");
@@ -72,33 +76,35 @@ export async function toggleHabit(habitId: string) {
   const isCompletedToday = habit.completions.length > 0;
 
   if (isCompletedToday) {
-    // Un-complete
-    const completionId = habit.completions[0].id;
-    await prisma.habitCompletion.delete({ where: { id: completionId } });
-    
+    // Delete all completions recorded today so no duplicates remain
+    await prisma.habitCompletion.deleteMany({
+      where: {
+        habitId,
+        completedAt: { gte: startOfToday },
+      },
+    });
+
     await prisma.habit.update({
       where: { id: habitId },
-      data: { currentStreak: Math.max(0, habit.currentStreak - 1) }
+      data: { currentStreak: Math.max(0, habit.currentStreak - 1) },
     });
   } else {
-    // Complete
     await prisma.habitCompletion.create({
-      data: { habitId }
+      data: { habitId },
     });
-    
+
     const newStreak = habit.currentStreak + 1;
     await prisma.habit.update({
       where: { id: habitId },
-      data: { 
+      data: {
         currentStreak: newStreak,
-        longestStreak: Math.max(habit.longestStreak, newStreak)
-      }
+        longestStreak: Math.max(habit.longestStreak, newStreak),
+      },
     });
-    
-    // Also give XP to user
+
     await prisma.user.update({
       where: { id: user.id },
-      data: { xp: { increment: 10 } }
+      data: { xp: { increment: 10 } },
     });
   }
 
