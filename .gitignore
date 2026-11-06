@@ -46,8 +46,6 @@ next-env.d.ts
 /TIL-Cybersecurity
 AGENTS.md
 CLAUDE.md
-src/components/study/strategy-guide.tsx
-src/app/study-abroad/guide/
 
 # local one-off maintenance & private seed scripts
 bump-tasks.ts

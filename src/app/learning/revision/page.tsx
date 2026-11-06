@@ -8,7 +8,7 @@ export default async function RevisionPage() {
   const user = await ensureUserExists();
 
   const notes = await prisma.revisionNote.findMany({
-    where: { userId: user.id },
+    where: { userId: user.id, category: { not: "__STRATEGY_GUIDE_CONFIG__" } },
     orderBy: { createdAt: "desc" },
   });
 
