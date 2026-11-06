@@ -25,7 +25,8 @@ export async function getDashboardMetrics() {
     pendingTasks,
     habitCompletions,
     taskCompletions,
-    upcomingDeadlines
+    upcomingDeadlines,
+    firstDailyTask
   ] = await Promise.all([
     prisma.task.count({
       where: {
@@ -62,6 +63,11 @@ export async function getDashboardMetrics() {
       },
       orderBy: { deadline: "asc" },
       take: 3
+    }),
+    prisma.task.findFirst({
+      where: { userId: user.id, scope: "DAILY", dueDate: { not: null } },
+      orderBy: { dueDate: "asc" },
+      select: { dueDate: true }
     })
   ]);
 
@@ -96,7 +102,8 @@ export async function getDashboardMetrics() {
     count
   }));
 
-  const startDate = new Date("2026-11-05T00:00:00.000Z");
+  const startDate = firstDailyTask?.dueDate ? new Date(firstDailyTask.dueDate) : new Date(user.createdAt);
+  startDate.setUTCHours(0, 0, 0, 0);
   const today = new Date();
   const diffTime = today.getTime() - startDate.getTime();
   const journeyDay = diffTime > 0 ? Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24))) : 0;
