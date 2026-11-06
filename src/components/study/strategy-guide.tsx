@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { GraduationCap, BrainCircuit, Globe, Plane, FileText, Calendar, Compass, ExternalLink } from "lucide-react";
+import { GraduationCap, BrainCircuit, Globe, Plane, FileText, Calendar, Compass, ExternalLink, Award } from "lucide-react";
 
 interface OpportunityItem {
   title: string;
@@ -28,6 +28,7 @@ export interface StrategyGuideData {
   subtitle: string;
   calls2026: OpportunityItem[];
   calls2027: OpportunityItem[];
+  fellowships?: OpportunityItem[];
   usa: OpportunityItem[];
   canada: OpportunityItem[];
   funding: {
@@ -72,22 +73,27 @@ export function StrategyGuide({ data }: { data?: StrategyGuideData | null }) {
 
       <Tabs defaultValue="2026-apps" className="w-full">
         <TabsList className="flex flex-wrap w-full h-auto p-1 bg-card/50 gap-1">
-          <TabsTrigger value="2026-apps" className="flex-1 py-3 flex items-center gap-2 min-w-[140px]">
+          <TabsTrigger value="2026-apps" className="flex-1 py-3 flex items-center gap-2 min-w-[130px]">
             <Calendar className="w-4 h-4" /> 2026 Calls
           </TabsTrigger>
-          <TabsTrigger value="2027-apps" className="flex-1 py-3 flex items-center gap-2 min-w-[140px]">
+          <TabsTrigger value="2027-apps" className="flex-1 py-3 flex items-center gap-2 min-w-[130px]">
             <Compass className="w-4 h-4" /> 2027 Calls
           </TabsTrigger>
-          <TabsTrigger value="usa" className="flex-1 py-3 flex items-center gap-2 min-w-[140px]">
+          {data.fellowships && data.fellowships.length > 0 && (
+            <TabsTrigger value="fellowships" className="flex-1 py-3 flex items-center gap-2 min-w-[150px]">
+              <Award className="w-4 h-4" /> Fellowships & Policy
+            </TabsTrigger>
+          )}
+          <TabsTrigger value="usa" className="flex-1 py-3 flex items-center gap-2 min-w-[130px]">
             <Plane className="w-4 h-4" /> USA Top 15
           </TabsTrigger>
-          <TabsTrigger value="canada" className="flex-1 py-3 flex items-center gap-2 min-w-[140px]">
+          <TabsTrigger value="canada" className="flex-1 py-3 flex items-center gap-2 min-w-[130px]">
             <Plane className="w-4 h-4" /> Canada Top 10
           </TabsTrigger>
           <TabsTrigger value="funding" className="flex-1 py-3 flex items-center gap-2 min-w-[140px]">
             <GraduationCap className="w-4 h-4" /> TA/RA & Outreach
           </TabsTrigger>
-          <TabsTrigger value="profile" className="flex-1 py-3 flex items-center gap-2 min-w-[140px]">
+          <TabsTrigger value="profile" className="flex-1 py-3 flex items-center gap-2 min-w-[130px]">
             <BrainCircuit className="w-4 h-4" /> Profile & CGPA
           </TabsTrigger>
         </TabsList>
@@ -107,6 +113,16 @@ export function StrategyGuide({ data }: { data?: StrategyGuideData | null }) {
             ))}
           </div>
         </TabsContent>
+
+        {data.fellowships && data.fellowships.length > 0 && (
+          <TabsContent value="fellowships" className="mt-6 space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+              {data.fellowships.map((item, idx) => (
+                <AppCard key={idx} {...item} />
+              ))}
+            </div>
+          </TabsContent>
+        )}
 
         <TabsContent value="usa" className="mt-6 space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
