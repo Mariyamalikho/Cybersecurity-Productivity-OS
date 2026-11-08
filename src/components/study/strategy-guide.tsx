@@ -72,29 +72,29 @@ export function StrategyGuide({ data }: { data?: StrategyGuideData | null }) {
       </div>
 
       <Tabs defaultValue="2026-apps" className="w-full">
-        <TabsList className="flex flex-wrap w-full h-auto p-1 bg-card/50 gap-1">
-          <TabsTrigger value="2026-apps" className="flex-1 py-3 flex items-center gap-2 min-w-[130px]">
-            <Calendar className="w-4 h-4" /> 2026 Calls
+        <TabsList className="flex flex-wrap w-full h-auto p-1.5 bg-card/50 gap-1.5 border border-border/40 rounded-xl">
+          <TabsTrigger value="2026-apps" className="flex-1 px-4 py-2.5 flex items-center justify-center gap-2">
+            <Calendar className="w-4 h-4 shrink-0" /> 2026 Calls
           </TabsTrigger>
-          <TabsTrigger value="2027-apps" className="flex-1 py-3 flex items-center gap-2 min-w-[130px]">
-            <Compass className="w-4 h-4" /> 2027 Calls
+          <TabsTrigger value="2027-apps" className="flex-1 px-4 py-2.5 flex items-center justify-center gap-2">
+            <Compass className="w-4 h-4 shrink-0" /> 2027 Calls
           </TabsTrigger>
           {data.fellowships && data.fellowships.length > 0 && (
-            <TabsTrigger value="fellowships" className="flex-1 py-3 flex items-center gap-2 min-w-[150px]">
-              <Award className="w-4 h-4" /> Fellowships & Policy
+            <TabsTrigger value="fellowships" className="flex-1 px-4 py-2.5 flex items-center justify-center gap-2">
+              <Award className="w-4 h-4 shrink-0" /> Fellowships & Policy
             </TabsTrigger>
           )}
-          <TabsTrigger value="usa" className="flex-1 py-3 flex items-center gap-2 min-w-[130px]">
-            <Plane className="w-4 h-4" /> USA Top 15
+          <TabsTrigger value="usa" className="flex-1 px-4 py-2.5 flex items-center justify-center gap-2">
+            <Plane className="w-4 h-4 shrink-0" /> USA Top 15
           </TabsTrigger>
-          <TabsTrigger value="canada" className="flex-1 py-3 flex items-center gap-2 min-w-[130px]">
-            <Plane className="w-4 h-4" /> Canada Top 10
+          <TabsTrigger value="canada" className="flex-1 px-4 py-2.5 flex items-center justify-center gap-2">
+            <Plane className="w-4 h-4 shrink-0" /> Canada Top 10
           </TabsTrigger>
-          <TabsTrigger value="funding" className="flex-1 py-3 flex items-center gap-2 min-w-[140px]">
-            <GraduationCap className="w-4 h-4" /> TA/RA & Outreach
+          <TabsTrigger value="funding" className="flex-1 px-4 py-2.5 flex items-center justify-center gap-2">
+            <GraduationCap className="w-4 h-4 shrink-0" /> TA/RA & Outreach
           </TabsTrigger>
-          <TabsTrigger value="profile" className="flex-1 py-3 flex items-center gap-2 min-w-[130px]">
-            <BrainCircuit className="w-4 h-4" /> Profile & CGPA
+          <TabsTrigger value="profile" className="flex-1 px-4 py-2.5 flex items-center justify-center gap-2">
+            <BrainCircuit className="w-4 h-4 shrink-0" /> Profile & CGPA
           </TabsTrigger>
         </TabsList>
 

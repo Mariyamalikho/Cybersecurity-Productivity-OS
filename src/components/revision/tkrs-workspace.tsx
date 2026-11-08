@@ -528,24 +528,30 @@ export function TkrsWorkspace({ tkrsState, initialCornellNotes }: TkrsWorkspaceP
 
       {/* Main TKRS Navigation Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="flex flex-wrap w-full h-auto p-1 bg-card/50 gap-1 border border-border/40">
-          <TabsTrigger value="queue" className="flex-1 py-2.5 flex items-center gap-2 min-w-[150px]">
-            <BrainCircuit className="w-4 h-4" /> Spaced Repetition & Recall
+        <TabsList className="flex flex-wrap w-full h-auto p-1.5 bg-card/50 gap-1.5 border border-border/40 rounded-xl">
+          <TabsTrigger value="queue" className="flex-1 px-4 py-2.5 flex items-center justify-center gap-2">
+            <BrainCircuit className="w-4 h-4 shrink-0" />
+            <span>Spaced Repetition &amp; Recall</span>
           </TabsTrigger>
-          <TabsTrigger value="cards" className="flex-1 py-2.5 flex items-center gap-2 min-w-[140px]">
-            <Layers className="w-4 h-4" /> Knowledge Cards ({tkrsState.cards.length})
+          <TabsTrigger value="cards" className="flex-1 px-4 py-2.5 flex items-center justify-center gap-2">
+            <Layers className="w-4 h-4 shrink-0" />
+            <span>Knowledge Cards ({tkrsState.cards.length})</span>
           </TabsTrigger>
-          <TabsTrigger value="programming" className="flex-1 py-2.5 flex items-center gap-2 min-w-[150px]">
-            <Code2 className="w-4 h-4" /> Programming (5-Stage)
+          <TabsTrigger value="programming" className="flex-1 px-4 py-2.5 flex items-center justify-center gap-2">
+            <Code2 className="w-4 h-4 shrink-0" />
+            <span>Programming (5-Stage)</span>
           </TabsTrigger>
-          <TabsTrigger value="mistakes" className="flex-1 py-2.5 flex items-center gap-2 min-w-[140px]">
-            <AlertTriangle className="w-4 h-4" /> Mistake Library ({tkrsState.mistakes.length})
+          <TabsTrigger value="mistakes" className="flex-1 px-4 py-2.5 flex items-center justify-center gap-2">
+            <AlertTriangle className="w-4 h-4 shrink-0" />
+            <span>Mistake Library ({tkrsState.mistakes.length})</span>
           </TabsTrigger>
-          <TabsTrigger value="assessment" className="flex-1 py-2.5 flex items-center gap-2 min-w-[150px]">
-            <Award className="w-4 h-4" /> Weekly Assessment
+          <TabsTrigger value="assessment" className="flex-1 px-4 py-2.5 flex items-center justify-center gap-2">
+            <Award className="w-4 h-4 shrink-0" />
+            <span>Weekly Assessment</span>
           </TabsTrigger>
-          <TabsTrigger value="cornell" className="flex-1 py-2.5 flex items-center gap-2 min-w-[140px]">
-            <FileText className="w-4 h-4" /> Cornell Notes ({initialCornellNotes.length})
+          <TabsTrigger value="cornell" className="flex-1 px-4 py-2.5 flex items-center justify-center gap-2">
+            <FileText className="w-4 h-4 shrink-0" />
+            <span>Cornell Notes ({initialCornellNotes.length})</span>
           </TabsTrigger>
         </TabsList>
 
