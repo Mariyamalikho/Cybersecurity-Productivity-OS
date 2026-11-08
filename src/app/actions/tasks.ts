@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { ensureUserExists } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
+import { ensureCardForCompletedTask } from "@/app/actions/tkrs";
 
 export async function getTasks() {
   const user = await ensureUserExists();
@@ -46,7 +47,7 @@ export async function toggleTask(taskId: string, currentStatus: string) {
   const newStatus = currentStatus === "COMPLETED" ? "PENDING" : "COMPLETED";
   const completedAt = newStatus === "COMPLETED" ? new Date() : null;
 
-  await prisma.task.update({
+  const updatedTask = await prisma.task.update({
     where: { id: taskId, userId: user.id },
     data: { status: newStatus, completedAt }
   });
@@ -56,6 +57,13 @@ export async function toggleTask(taskId: string, currentStatus: string) {
       where: { id: user.id },
       data: { xp: { increment: 20 } }
     });
+
+    // Automatically generate R0-R7 revision schedule & Knowledge Card when a concept is marked as learned
+    try {
+      await ensureCardForCompletedTask(user.id, updatedTask);
+    } catch (e) {
+      console.error("TKRS auto-card creation warning:", e);
+    }
   } else if (currentStatus === "COMPLETED" && newStatus === "PENDING") {
     // If they un-check a task, remove the XP they gained
     await prisma.user.update({
@@ -65,6 +73,7 @@ export async function toggleTask(taskId: string, currentStatus: string) {
   }
 
   revalidatePath("/tasks");
+  revalidatePath("/learning/revision");
   revalidatePath("/calendar");
   revalidatePath("/");
 }

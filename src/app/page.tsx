@@ -4,10 +4,15 @@ import { TasksWidget } from "@/components/dashboard/tasks-widget";
 import { PomodoroWidget } from "@/components/dashboard/pomodoro-widget";
 import { HeatmapWidget } from "@/components/dashboard/heatmap-widget";
 import { DeadlinesWidget } from "@/components/dashboard/deadlines-widget";
+import { RetentionWidget } from "@/components/dashboard/retention-widget";
 import { getDashboardMetrics } from "@/app/actions/dashboard";
+import { getTkrsState } from "@/app/actions/tkrs";
 
 export default async function DashboardPage() {
-  const data = await getDashboardMetrics();
+  const [data, tkrsState] = await Promise.all([
+    getDashboardMetrics(),
+    getTkrsState(),
+  ]);
 
   return (
     <div className="flex flex-col h-full w-full bg-background/50">
@@ -41,6 +46,10 @@ export default async function DashboardPage() {
             <div className="xl:col-span-1 h-[400px]">
               <HeatmapWidget heatmapData={data.heatmapData} />
             </div>
+          </div>
+
+          <div className="pt-2">
+            <RetentionWidget tkrsState={tkrsState} />
           </div>
         </div>
       </div>

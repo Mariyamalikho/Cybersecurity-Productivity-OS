@@ -1,16 +1,23 @@
 import { prisma } from "@/lib/prisma";
 import { ensureUserExists } from "@/lib/auth";
-import { RevisionClient } from "@/components/revision/revision-client";
+import { getTkrsState } from "@/app/actions/tkrs";
+import { TkrsWorkspace } from "@/components/revision/tkrs-workspace";
 
 export const maxDuration = 60; // Allow AI generation to run up to 60s
 
 export default async function RevisionPage() {
   const user = await ensureUserExists();
 
-  const notes = await prisma.revisionNote.findMany({
-    where: { userId: user.id, category: { not: "__STRATEGY_GUIDE_CONFIG__" } },
-    orderBy: { createdAt: "desc" },
-  });
+  const [notes, tkrsState] = await Promise.all([
+    prisma.revisionNote.findMany({
+      where: {
+        userId: user.id,
+        NOT: { category: { startsWith: "__" } },
+      },
+      orderBy: { createdAt: "desc" },
+    }),
+    getTkrsState(),
+  ]);
 
   return (
     <div className="flex flex-col h-full w-full bg-background/50">
@@ -18,20 +25,22 @@ export default async function RevisionPage() {
         <div className="flex items-center gap-2 text-sm text-muted-foreground font-medium">
           <span className="text-foreground">Learning</span>
           <span>/</span>
-          <span>Revisions (Cornell Notes)</span>
+          <span>Revisions &amp; Technical Knowledge Retention System (TKRS)</span>
         </div>
       </header>
 
       <div className="flex-1 overflow-y-auto overflow-x-hidden p-8 min-h-[0px]">
         <div className="max-w-6xl mx-auto space-y-8">
           <div>
-            <h1 className="text-3xl font-heading font-bold mb-2">Cornell Revisions</h1>
+            <h1 className="text-3xl font-heading font-bold mb-2">
+              Technical Knowledge Retention &amp; Cornell Revisions
+            </h1>
             <p className="text-muted-foreground">
-              Your AI-generated revision notes. Review these daily to enforce active recall and combat the forgetting curve.
+              Combat the forgetting curve with adaptive R0–R7 spaced repetition, active recall testing, technical knowledge cards, 5-stage programming retention, mistake tracking, and Cornell notes.
             </p>
           </div>
 
-          <RevisionClient initialNotes={notes} />
+          <TkrsWorkspace tkrsState={tkrsState} initialCornellNotes={notes} />
         </div>
       </div>
     </div>
