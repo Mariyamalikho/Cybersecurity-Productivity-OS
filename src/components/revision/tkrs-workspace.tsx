@@ -528,30 +528,39 @@ export function TkrsWorkspace({ tkrsState, initialCornellNotes }: TkrsWorkspaceP
 
       {/* Main TKRS Navigation Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="flex flex-wrap w-full h-auto p-1.5 bg-card/50 gap-1.5 border border-border/40 rounded-xl">
-          <TabsTrigger value="queue" className="flex-1 px-4 py-2.5 flex items-center justify-center gap-2">
-            <BrainCircuit className="w-4 h-4 shrink-0" />
-            <span>Spaced Repetition &amp; Recall</span>
+        <TabsList className="grid grid-cols-2 sm:grid-cols-3 lg:flex lg:flex-nowrap w-full h-auto p-1.5 bg-card/60 backdrop-blur-md gap-1.5 border border-border/50 rounded-xl">
+          <TabsTrigger value="queue" className="px-3 py-2.5 flex items-center justify-center gap-2">
+            <BrainCircuit className="w-4 h-4 shrink-0 text-primary" />
+            <span>Spaced Repetition</span>
           </TabsTrigger>
-          <TabsTrigger value="cards" className="flex-1 px-4 py-2.5 flex items-center justify-center gap-2">
-            <Layers className="w-4 h-4 shrink-0" />
-            <span>Knowledge Cards ({tkrsState.cards.length})</span>
+          <TabsTrigger value="cards" className="px-3 py-2.5 flex items-center justify-center gap-2">
+            <Layers className="w-4 h-4 shrink-0 text-blue-400" />
+            <span>Knowledge Cards</span>
+            <span className="px-1.5 py-0.5 rounded-full bg-muted/80 text-[11px] font-mono text-muted-foreground">
+              {tkrsState.cards.length}
+            </span>
           </TabsTrigger>
-          <TabsTrigger value="programming" className="flex-1 px-4 py-2.5 flex items-center justify-center gap-2">
-            <Code2 className="w-4 h-4 shrink-0" />
-            <span>Programming (5-Stage)</span>
+          <TabsTrigger value="programming" className="px-3 py-2.5 flex items-center justify-center gap-2">
+            <Code2 className="w-4 h-4 shrink-0 text-cyan-400" />
+            <span>Programming Lab</span>
           </TabsTrigger>
-          <TabsTrigger value="mistakes" className="flex-1 px-4 py-2.5 flex items-center justify-center gap-2">
-            <AlertTriangle className="w-4 h-4 shrink-0" />
-            <span>Mistake Library ({tkrsState.mistakes.length})</span>
+          <TabsTrigger value="mistakes" className="px-3 py-2.5 flex items-center justify-center gap-2">
+            <AlertTriangle className="w-4 h-4 shrink-0 text-amber-400" />
+            <span>Mistake Library</span>
+            <span className="px-1.5 py-0.5 rounded-full bg-muted/80 text-[11px] font-mono text-muted-foreground">
+              {tkrsState.mistakes.length}
+            </span>
           </TabsTrigger>
-          <TabsTrigger value="assessment" className="flex-1 px-4 py-2.5 flex items-center justify-center gap-2">
-            <Award className="w-4 h-4 shrink-0" />
+          <TabsTrigger value="assessment" className="px-3 py-2.5 flex items-center justify-center gap-2">
+            <Award className="w-4 h-4 shrink-0 text-emerald-400" />
             <span>Weekly Assessment</span>
           </TabsTrigger>
-          <TabsTrigger value="cornell" className="flex-1 px-4 py-2.5 flex items-center justify-center gap-2">
-            <FileText className="w-4 h-4 shrink-0" />
-            <span>Cornell Notes ({initialCornellNotes.length})</span>
+          <TabsTrigger value="cornell" className="px-3 py-2.5 flex items-center justify-center gap-2">
+            <FileText className="w-4 h-4 shrink-0 text-purple-400" />
+            <span>Cornell Notes</span>
+            <span className="px-1.5 py-0.5 rounded-full bg-muted/80 text-[11px] font-mono text-muted-foreground">
+              {initialCornellNotes.length}
+            </span>
           </TabsTrigger>
         </TabsList>
 

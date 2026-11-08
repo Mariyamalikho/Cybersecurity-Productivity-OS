@@ -72,29 +72,36 @@ export function StrategyGuide({ data }: { data?: StrategyGuideData | null }) {
       </div>
 
       <Tabs defaultValue="2026-apps" className="w-full">
-        <TabsList className="flex flex-wrap w-full h-auto p-1.5 bg-card/50 gap-1.5 border border-border/40 rounded-xl">
-          <TabsTrigger value="2026-apps" className="flex-1 px-4 py-2.5 flex items-center justify-center gap-2">
-            <Calendar className="w-4 h-4 shrink-0" /> 2026 Calls
+        <TabsList className="grid grid-cols-2 sm:grid-cols-4 lg:flex lg:flex-nowrap w-full h-auto p-1.5 bg-card/60 backdrop-blur-md gap-1.5 border border-border/50 rounded-xl">
+          <TabsTrigger value="2026-apps" className="px-3 py-2.5 flex items-center justify-center gap-2">
+            <Calendar className="w-4 h-4 shrink-0 text-blue-400" />
+            <span>2026 Calls</span>
           </TabsTrigger>
-          <TabsTrigger value="2027-apps" className="flex-1 px-4 py-2.5 flex items-center justify-center gap-2">
-            <Compass className="w-4 h-4 shrink-0" /> 2027 Calls
+          <TabsTrigger value="2027-apps" className="px-3 py-2.5 flex items-center justify-center gap-2">
+            <Compass className="w-4 h-4 shrink-0 text-cyan-400" />
+            <span>2027 Calls</span>
           </TabsTrigger>
           {data.fellowships && data.fellowships.length > 0 && (
-            <TabsTrigger value="fellowships" className="flex-1 px-4 py-2.5 flex items-center justify-center gap-2">
-              <Award className="w-4 h-4 shrink-0" /> Fellowships & Policy
+            <TabsTrigger value="fellowships" className="px-3 py-2.5 flex items-center justify-center gap-2">
+              <Award className="w-4 h-4 shrink-0 text-amber-400" />
+              <span>Fellowships</span>
             </TabsTrigger>
           )}
-          <TabsTrigger value="usa" className="flex-1 px-4 py-2.5 flex items-center justify-center gap-2">
-            <Plane className="w-4 h-4 shrink-0" /> USA Top 15
+          <TabsTrigger value="usa" className="px-3 py-2.5 flex items-center justify-center gap-2">
+            <Plane className="w-4 h-4 shrink-0 text-emerald-400" />
+            <span>USA Top 15</span>
           </TabsTrigger>
-          <TabsTrigger value="canada" className="flex-1 px-4 py-2.5 flex items-center justify-center gap-2">
-            <Plane className="w-4 h-4 shrink-0" /> Canada Top 10
+          <TabsTrigger value="canada" className="px-3 py-2.5 flex items-center justify-center gap-2">
+            <Plane className="w-4 h-4 shrink-0 text-red-400" />
+            <span>Canada Top 10</span>
           </TabsTrigger>
-          <TabsTrigger value="funding" className="flex-1 px-4 py-2.5 flex items-center justify-center gap-2">
-            <GraduationCap className="w-4 h-4 shrink-0" /> TA/RA & Outreach
+          <TabsTrigger value="funding" className="px-3 py-2.5 flex items-center justify-center gap-2">
+            <GraduationCap className="w-4 h-4 shrink-0 text-purple-400" />
+            <span>TA/RA Funding</span>
           </TabsTrigger>
-          <TabsTrigger value="profile" className="flex-1 px-4 py-2.5 flex items-center justify-center gap-2">
-            <BrainCircuit className="w-4 h-4 shrink-0" /> Profile & CGPA
+          <TabsTrigger value="profile" className="px-3 py-2.5 flex items-center justify-center gap-2">
+            <BrainCircuit className="w-4 h-4 shrink-0 text-primary" />
+            <span>Profile &amp; CGPA</span>
           </TabsTrigger>
         </TabsList>
 
@@ -219,60 +226,101 @@ export function StrategyGuide({ data }: { data?: StrategyGuideData | null }) {
 
         <TabsContent value="profile" className="mt-6 space-y-6">
           <Card className="border-border/40 bg-card/30 backdrop-blur-sm">
-            <CardHeader>
-              <CardTitle className="text-2xl font-heading">Candidate Background Summary</CardTitle>
+            <CardHeader className="pb-4 border-b border-border/40">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 rounded-xl bg-primary/10 text-primary">
+                  <BrainCircuit className="w-5 h-5" />
+                </div>
+                <div>
+                  <CardTitle className="text-2xl font-heading">Candidate Background Summary</CardTitle>
+                  <CardDescription>Academic, Professional, and Research Positioning</CardDescription>
+                </div>
+              </div>
             </CardHeader>
-            <CardContent className="space-y-4 text-muted-foreground leading-relaxed">
-              <ul className="list-disc pl-5 space-y-2">
+            <CardContent className="p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {data.profile?.background?.map((item, idx) => (
-                  <li key={idx}>
-                    <strong className="text-foreground">{item.label}:</strong> {item.text}
-                  </li>
+                  <div
+                    key={idx}
+                    className="p-4 rounded-xl border border-border/50 bg-background/40 hover:border-border transition-colors space-y-1.5"
+                  >
+                    <div className="text-xs font-semibold uppercase tracking-wider text-primary">
+                      {item.label}
+                    </div>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {item.text}
+                    </p>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </CardContent>
           </Card>
 
           <Card className="border-border/40 bg-card/30 backdrop-blur-sm">
-            <CardHeader>
-              <CardTitle className="text-2xl font-heading">CGPA & Grade Conversion Summary</CardTitle>
-              <CardDescription>Verified Transcript & Grade Equivalency Overview</CardDescription>
+            <CardHeader className="pb-4 border-b border-border/40">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-400">
+                  <GraduationCap className="w-5 h-5" />
+                </div>
+                <div>
+                  <CardTitle className="text-2xl font-heading">CGPA &amp; Grade Conversion Summary</CardTitle>
+                  <CardDescription>Verified Transcript &amp; International Grade Equivalency Overview</CardDescription>
+                </div>
+              </div>
             </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="bg-muted/30 p-4 rounded-xl border border-border/40 space-y-4">
-                <h3 className="text-lg font-bold text-foreground">Official Transcript Analysis</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-muted-foreground">
-                  <div>
-                    <ul className="space-y-1">
-                      {data.profile?.transcriptLeft?.map((item, idx) => (
-                        <li key={idx}>
-                          <strong className="text-foreground">{item.label}:</strong> {item.value}
-                        </li>
-                      ))}
-                    </ul>
+            <CardContent className="p-6 space-y-6">
+              <div className="space-y-3">
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Official Transcript Analysis
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2.5">
+                    {data.profile?.transcriptLeft?.map((item, idx) => (
+                      <div
+                        key={idx}
+                        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 p-3.5 rounded-xl border border-border/50 bg-background/40 text-sm"
+                      >
+                        <span className="text-muted-foreground font-medium">{item.label}</span>
+                        <span className="font-heading font-semibold text-foreground sm:text-right">
+                          {item.value}
+                        </span>
+                      </div>
+                    ))}
                   </div>
-                  <div>
-                    <ul className="space-y-1">
-                      {data.profile?.transcriptRight?.map((item, idx) => (
-                        <li key={idx}>
-                          <strong className="text-foreground">{item.label}:</strong> {item.value}
-                        </li>
-                      ))}
-                    </ul>
+                  <div className="space-y-2.5">
+                    {data.profile?.transcriptRight?.map((item, idx) => (
+                      <div
+                        key={idx}
+                        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 p-3.5 rounded-xl border border-border/50 bg-background/40 text-sm"
+                      >
+                        <span className="text-muted-foreground font-medium">{item.label}</span>
+                        <span className="font-heading font-semibold text-emerald-400 sm:text-right">
+                          {item.value}
+                        </span>
+                      </div>
+                    ))}
                   </div>
                 </div>
-
-                {data.profile?.majorSubjects?.length > 0 && (
-                  <div className="pt-2 border-t border-border/40">
-                    <h4 className="font-semibold text-foreground mb-2">Key High-Scoring Major Subjects:</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-1 text-xs text-muted-foreground">
-                      {data.profile.majorSubjects.map((subj, idx) => (
-                        <div key={idx}>{subj}</div>
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
+
+              {data.profile?.majorSubjects?.length > 0 && (
+                <div className="pt-4 border-t border-border/40 space-y-3">
+                  <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    Key High-Scoring Major Subjects
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                    {data.profile.majorSubjects.map((subj, idx) => (
+                      <div
+                        key={idx}
+                        className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-lg border border-border/40 bg-background/30 text-xs sm:text-sm font-medium text-foreground"
+                      >
+                        <Award className="w-4 h-4 text-amber-400 shrink-0" />
+                        <span>{subj}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
