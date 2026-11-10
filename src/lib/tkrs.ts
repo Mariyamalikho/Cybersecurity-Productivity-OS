@@ -221,19 +221,7 @@ export const DEFAULT_REVISION_INTERVALS: {
   { stage: "R7", stageIndex: 7, days: 90, label: "After 90 days" },
 ];
 
-export function getPktDateKey(date: Date = new Date()): string {
-  const pktOffsetMs = 5 * 60 * 60 * 1000;
-  const pktDate = new Date(date.getTime() + pktOffsetMs);
-  return pktDate.toISOString().slice(0, 10);
-}
-
-export function getStartOfTodayPktDate(): Date {
-  const now = new Date();
-  const pktOffsetMs = 5 * 60 * 60 * 1000;
-  const pktNow = new Date(now.getTime() + pktOffsetMs);
-  pktNow.setUTCHours(0, 0, 0, 0);
-  return new Date(pktNow.getTime() - pktOffsetMs);
-}
+export { getPktDateKey, getPktStartOfDay as getStartOfTodayPktDate } from "@/lib/timezone";
 
 export function addDaysToDate(baseDate: Date, days: number): Date {
   const result = new Date(baseDate.getTime());

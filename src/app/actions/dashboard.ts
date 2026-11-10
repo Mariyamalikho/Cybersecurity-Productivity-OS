@@ -3,19 +3,14 @@
 import { prisma } from "@/lib/prisma";
 import { ensureUserExists } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
+import { getPktStartOfDay, getPktDateKey } from "@/lib/timezone";
 
 export async function getDashboardMetrics() {
   const user = await ensureUserExists();
   
-  const startOfToday = new Date();
-  startOfToday.setHours(0, 0, 0, 0);
-
-  const sevenDaysAgo = new Date();
-  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-  sevenDaysAgo.setHours(0, 0, 0, 0);
-
-  const thirtyDaysAgo = new Date();
-  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  const startOfToday = getPktStartOfDay();
+  const sevenDaysAgo = new Date(startOfToday.getTime() - 7 * 24 * 60 * 60 * 1000);
+  const thirtyDaysAgo = new Date(startOfToday.getTime() - 30 * 24 * 60 * 60 * 1000);
 
   // Execute independent database queries in parallel for maximum performance
   const [
@@ -45,8 +40,15 @@ export async function getDashboardMetrics() {
       where: { userId: user.id }
     }),
     prisma.task.findMany({
-      where: { userId: user.id, status: "PENDING" },
-      orderBy: { createdAt: "desc" },
+      where: {
+        userId: user.id,
+        status: "PENDING",
+        scope: "DAILY"
+      },
+      orderBy: [
+        { dueDate: "asc" },
+        { createdAt: "asc" }
+      ],
       take: 4
     }),
     prisma.habitCompletion.findMany({
@@ -77,22 +79,15 @@ export async function getDashboardMetrics() {
 
   const activityMap: Record<string, number> = {};
   
-  // Server-side local date extraction (using local timezone of server)
-  const formatDate = (date: Date) => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  };
-  
+  // PKT date extraction
   habitCompletions.forEach(hc => {
-    const d = formatDate(hc.completedAt);
+    const d = getPktDateKey(hc.completedAt);
     activityMap[d] = (activityMap[d] || 0) + 1;
   });
   
   taskCompletions.forEach(tc => {
     if (tc.completedAt) {
-      const d = formatDate(tc.completedAt);
+      const d = getPktDateKey(tc.completedAt);
       activityMap[d] = (activityMap[d] || 0) + 1;
     }
   });
@@ -103,10 +98,10 @@ export async function getDashboardMetrics() {
   }));
 
   const startDate = firstDailyTask?.dueDate ? new Date(firstDailyTask.dueDate) : new Date(user.createdAt);
-  startDate.setUTCHours(0, 0, 0, 0);
-  const today = new Date();
-  const diffTime = today.getTime() - startDate.getTime();
-  const journeyDay = diffTime > 0 ? Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24))) : 0;
+  const startOfJourney = getPktStartOfDay(startDate);
+  const startOfCurrentDay = getPktStartOfDay(new Date());
+  const diffTime = startOfCurrentDay.getTime() - startOfJourney.getTime();
+  const journeyDay = diffTime >= 0 ? Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1 : 0;
   
   const activeHabitsCount = habits.filter(h => h.status === "ACTIVE").length;
 

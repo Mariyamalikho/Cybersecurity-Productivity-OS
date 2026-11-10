@@ -2,12 +2,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { getTasks } from "@/app/actions/tasks";
 import { TaskClient } from "./task-client";
 import { TaskDialog } from "@/app/calendar/task-dialog";
+import { getPktEndOfDay, isSamePktDay } from "@/lib/timezone";
 
 export default async function TasksPage() {
   const allTasks = await getTasks();
   
-  const today = new Date();
-  today.setHours(23, 59, 59, 999);
+  const endOfToday = getPktEndOfDay();
   
   const tasks = allTasks.filter(t => {
     // Strictly show DAILY tasks due on or before today (overdue) + completed today
@@ -16,8 +16,8 @@ export default async function TasksPage() {
     if (!t.dueDate) return true;
     
     const dueDate = new Date(t.dueDate);
-    const isTodayOrPast = dueDate <= today;
-    const completedToday = t.status === "COMPLETED" && t.completedAt && new Date(t.completedAt).toDateString() === today.toDateString();
+    const isTodayOrPast = dueDate <= endOfToday;
+    const completedToday = t.status === "COMPLETED" && t.completedAt && isSamePktDay(new Date(t.completedAt), new Date());
     
     return (isTodayOrPast && t.status === "PENDING") || completedToday || (!isTodayOrPast && t.status === "COMPLETED" && completedToday);
   });
