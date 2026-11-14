@@ -1,9 +1,19 @@
+import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { ensureUserExists } from "@/lib/auth";
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { QuizClient } from "./quiz-client";
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  await params;
+  return {
+    title: "Daily Synthesis Quiz — Knowledge Verification",
+    description: "Daily interactive review quiz verifying conceptual grasp and unlocking daily XP rewards.",
+    robots: { index: false, follow: false },
+  };
+}
 
 export default async function QuizPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
